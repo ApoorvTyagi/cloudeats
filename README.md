@@ -14,9 +14,3 @@
 - Restaurant Online/Offline Validations
 - Variable distance (upto a limit) in case nearby restaurants not found
 - Restaurants are able to set the count of max concurrent engagement with the customers
-
-### Did this project help you? I'd love your support.
-
-<a href="https://www.buymeacoffee.com/apoorvtyagi" target="_blank">
-  <img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;">
-</a>
