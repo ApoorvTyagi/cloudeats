@@ -2,8 +2,6 @@
 - Clone or fork this repo
 - Install NodeJS and MongoDB
 - Run `npm install`
-- run `mongoimport --db uberForX --collection cops --drop --file ./db/cops.json` to import sample cop information in MongoDB
-- run `mongoimport --db uberForX --collection requests --drop --file ./db/crime-data.json` to import sample crime information in MongoDB
 
 ### How to run:
 - run `node app.js`
