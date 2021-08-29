@@ -5,8 +5,8 @@
 
 ### How to run:
 - run `node app.js`
-- Open a demo customer page by going to http://localhost:8000/customer.html?userId=YOURNAME
-- Open 1 or more Restaurant in separate tabs - [01](http://localhost:8000/restaurant.html?userId=01), [02](http://localhost:8000/restaurant.html?userId=02)
+- Open a demo customer page by going to http://localhost:8000/login
+- Open 1 or more Restaurant in separate tabs - [Restaurant 1](http://localhost:8000/restaurant.html?userId=1), [Restaurant 2](http://localhost:8000/restaurant.html?userId=2)
 
 ### Future Improvements
 - Integrating Mapbox for Restaurants
