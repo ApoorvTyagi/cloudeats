@@ -52,7 +52,7 @@
     <script type="text/javascript">
         const socket = io();
 
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYXBvb3J2dHlhZ2kiLCJhIjoiY2tzcnJhZ2ExMHBodDMxbzZjZW02YWc4bCJ9.R3qCkhFmymxo6HDFwVSd-Q';
+        mapboxgl.accessToken = '';
         const map = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/streets-v11', // style URL
@@ -84,7 +84,7 @@
 
                 document.getElementById("restaurantDetails").innerHTML = `Address: ${restaurantDetails.location.address}`;
                 
-                L.mapbox.accessToken = "pk.eyJ1IjoiYXBvb3J2dHlhZ2kiLCJhIjoiY2tzcnJhZ2ExMHBodDMxbzZjZW02YWc4bCJ9.R3qCkhFmymxo6HDFwVSd-Q";
+                L.mapbox.accessToken = "";
                 map = L.mapbox.map("map", "mapbox.streets");
                 map.setView([restaurantDetails.location.latitude, restaurantDetails.location.longitude], 15);
 
