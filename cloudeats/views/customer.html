@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Cloudeats | Home</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,700" rel="stylesheet" />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+  </head>
+  <body data-userId="{{ userId }}">
+    <header class="header">
+      <div class="header__logo">
+        <img src="img/Logo.png" alt="logo" />
+      </div>
+      <nav class="nav nav--tours">
+          <a href="#" class="nav__el">Welcome To Cloudeats : {{ userId }}</a>
+      </nav>
+      <div>
+        <button id="logout" class="btn btn--green btn--small">Logout</button>
+      </div>
+    </header>
+  
+    <main class="main">
+      <div class="card-container">
+          <div class="card">
+          <div class="card__header">
+              <div class="card__picture">
+              <div class="card__picture-overlay">&nbsp;</div>
+              <img
+                  src="img/Pizza.png"
+                  alt="Pizza"
+                  class="card__picture-img"
+              />
+              </div>
+  
+              <h3 class="heading-tertirary">
+              <span>The Cheese Pizza</span>
+              </h3>
+          </div>
+  
+          <div class="card__footer">
+              <p>
+              <span class="card__footer-value">$15</span>
+              <span class="card__footer-text">per person</span>
+              </p>
+              <p class="card__ratings">
+              <span class="card__footer-value">4.9</span>
+              <span class="card__footer-text">rating (90)</span>
+              </p>
+              <button onclick="orderRequest()" class="btn btn--green btn--small">Order Now</button>
+          </div>
+          </div>
+  
+          <div class="card">
+          <div class="card__header">
+              <div class="card__picture">
+              <div class="card__picture-overlay">&nbsp;</div>
+              <img
+                  src="img/Burger.jpg"
+                  alt="Burger"
+                  class="card__picture-img"
+              />
+              </div>
+  
+              <h3 class="heading-tertirary">
+              <span>The Burger Fries Combo</span>
+              </h3>
+          </div>
+  
+          <div class="card__footer">
+              <p>
+              <span class="card__footer-value">$10</span>
+              <span class="card__footer-text">per person</span>
+              </p>
+              <p class="card__ratings">
+              <span class="card__footer-value">4.8</span>
+              <span class="card__footer-text">rating (71)</span>
+              </p>
+              <button onclick="orderRequest()" class="btn btn--green btn--small">Order Now</button>
+          </div>
+          </div>
+  
+          <div class="card">
+          <div class="card__header">
+              <div class="card__picture">
+              <div class="card__picture-overlay">&nbsp;</div>
+              <img
+                  src="img/Rolls.jpg"
+                  alt="Rolls"
+                  class="card__picture-img"
+              />
+              </div>
+  
+              <h3 class="heading-tertirary">
+              <span>The Hot & Spicy Rolls</span>
+              </h3>
+          </div>
+  
+          <div class="card__footer">
+              <p>
+              <span class="card__footer-value">$5</span>
+              <span class="card__footer-text">per meal</span>
+              </p>
+              <p class="card__ratings">
+              <span class="card__footer-value">4.9</span>
+              <span class="card__footer-text">rating (25)</span>
+              </p>
+              <button onclick="orderRequest()" class="btn btn--green btn--small">Order Now</button>
+          </div>
+        </div>   
+      </div>
+    </main>
+
+    <div id="notification" class="notif__el"></div>  
+  
+    <div class="footer">
+      <div class="footer__logo">
+          <img src="img/Logo.png" alt="logo" />
+      </div>
+      <ul class="footer__nav">
+          <li><a href="#">About us</a></li>
+          <li><a href="#">Contact</a></li>
+      </ul>
+      <p class="footer__copyright">
+          &copy; Cloudeats. All rights reserved.
+      </p>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js"></script>
+
+    <script type="text/javascript">
+        const socket = io();
+
+        const userId = document.body.getAttribute("data-userId");
+        socket.emit("join", {
+            userId: userId
+        }); // Join a room, roomname is the userId itself!
+
+        // Empty variables to store information. This will get filled later
+        let requestDetails = {};
+        let restaurantDetails = {};
+
+        requestDetails = {
+            customerId: userId,
+            location: {
+                address: "Indiranagar, Bengaluru",
+                latitude: 12.9718915,
+                longitude: 77.64115449999997
+            }
+        }
+
+        document.getElementById("logout").onclick = function () {
+            location.href = "http://localhost:8000/logout";
+        }
+
+        function orderRequest() { // When button is clicked, emit an event
+            socket.emit("order-request", requestDetails);
+        }
+
+        // Listen for a 'order-accepted' event
+        socket.on("order-accepted", (eventData) => {
+            restaurantDetails = eventData;
+            console.log(`Request accepted ${eventData}`);
+
+            // Display Restaurant address
+            document.getElementById("notification").innerHTML =
+                `UPDATE: \n ${restaurantDetails.displayName} is delivering from ${restaurantDetails.location.address} 
+                and will be arriving at your location shortly.\n You can reach them at their mobile: ${restaurantDetails.phone}`;
+        });
+
+        socket.on("order-delivered", (eventData) => {
+            restaurantDetails = eventData;
+            console.log(`Order delivered ${eventData}`);
+
+            document.getElementById("notification").innerHTML =
+                `UPDATE: \n Your order has been delivered. In case of any queries call: ${restaurantDetails.phone}`;
+        });
+    </script>
+  </body>
+  
+</html>

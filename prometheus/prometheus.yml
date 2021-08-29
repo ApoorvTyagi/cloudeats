@@ -1,0 +1,6 @@
+global:
+  scrape_interval: 5s
+scrape_configs:
+  - job_name: "cloudeats"
+    static_configs:
+      - targets: ["cloudeats:8000"]

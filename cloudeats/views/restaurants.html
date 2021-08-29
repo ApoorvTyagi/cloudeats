@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Cloudeats | Restaurant {{ userId }} </title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,700" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+    
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js"></script>
+</head>
+
+<body data-userId="{{ userId }}">
+    <header class="header">
+        <div class="header__logo">
+          <img src="img/Logo.png" alt="logo" />
+        </div>
+
+        <nav class="nav nav--tours">
+            <a href="#" class="nav__el">Restaurant Id: {{ userId }}</a>
+            <div id="restaurantDetails" class="nav__el"></div>
+        </nav>
+        
+        <div>
+          <button id="go-offline" class="btn btn--green btn--small">Go Offline</button>
+        </div>
+    </header>
+
+    <div id="notification" class="notif__el">Waiting for recieving orders</div>
+    
+    <br>
+
+    <div>
+        <button id="confirmOrder" value="Confirm Order" class="btn btn--green btn--small">Confirm Order</button>
+    </div> 
+
+    <br>
+    <main class="main">
+        <div class="card-container">
+            <div class="card">
+                <div id="map" style="width: 1200px; height: 400px;"></div>
+            </div>
+        </div>        
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script type="text/javascript">
+        const socket = io();
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYXBvb3J2dHlhZ2kiLCJhIjoiY2tzcnJhZ2ExMHBodDMxbzZjZW02YWc4bCJ9.R3qCkhFmymxo6HDFwVSd-Q';
+        const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+            center: [77.59, 12.97], // starting position [lng, lat]
+            zoom: 11 // starting zoom
+        });
+        
+        // Fetch userId from the data-atribute of the body tag
+        const userId = document.body.getAttribute("data-userId");
+        // Join a room, roomname is the userId itself!
+        socket.emit("join", {
+            userId: userId
+        });
+
+        // Empty variables to store information. This will get filled later
+        let requestDetails = {};
+        let restaurantDetails = {};
+        let marker;
+
+        // GET request using Axios to fetch the restaurants's details
+        axios.get(`/restaurants/info?userId=${userId}`)
+            .then( (response) => {
+                restaurantDetails = response.data.restaurantDetails;
+                restaurantDetails.location = {
+                    address: restaurantDetails.location.address,
+                    longitude: restaurantDetails.location.coordinates[0],
+                    latitude: restaurantDetails.location.coordinates[1]
+                };
+
+                document.getElementById("restaurantDetails").innerHTML = `Address: ${restaurantDetails.location.address}`;
+                
+                L.mapbox.accessToken = "pk.eyJ1IjoiYXBvb3J2dHlhZ2kiLCJhIjoiY2tzcnJhZ2ExMHBodDMxbzZjZW02YWc4bCJ9.R3qCkhFmymxo6HDFwVSd-Q";
+                map = L.mapbox.map("map", "mapbox.streets");
+                map.setView([restaurantDetails.location.latitude, restaurantDetails.location.longitude], 15);
+
+                // Display a default marker
+                marker = L.marker([restaurantDetails.location.latitude, restaurantDetails.location.longitude]).addTo(map);
+
+                // Use MapBox geo-coding API
+                map.addControl(L.mapbox.geocoderControl("mapbox.places", {
+                    autocomplete: true,
+                }).on("select", (data) => { // This function runs when a place is selected
+                    // data contains the geocding results
+                    console.log(data);
+
+                    // Set the marker to new location
+                    marker.setLatLng([data.feature.center[1], data.feature.center[0]]);
+                }));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+        // Listen for a 'order-request' event
+        socket.on("order-request", (eventData) => {
+            console.log("Event recieved...");
+            requestDetails = eventData; // Save request details
+
+            document.getElementById("notification").innerHTML =
+            `UPDATE - Customer ${requestDetails.customerId} has ordered food!
+             They're at ${requestDetails.location.address} (${requestDetails.location.latitude}, ${requestDetails.location.longitude}).
+             Click on "Confirm Order" to accept the order request`;
+        });
+
+        document.getElementById("confirmOrder").onclick = function() {
+            var event;
+            var name = document.getElementById("confirmOrder");
+            if(document.getElementById("confirmOrder").value === 'Confirm Order'){
+                event  = 'request-accepted';
+                name.innerHTML  = 'Delivered Order';
+                name.value = 'Order Delivered';
+            } else {
+                event  = 'order-completed';
+                name.innerHTML  = 'Confirm Order';
+                name.value = 'Confirm Order';
+                document.getElementById("notification").innerHTML = 'Waiting for recieving orders';
+            }
+
+            console.log(event);
+
+            // On clicking the button, emit a 'request-accepted' event/signal and send relevant info back to server
+            socket.emit(event, {
+                requestDetails: requestDetails,
+                restaurantDetails: restaurantDetails
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Cloudeats | Home</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,700" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="header__logo">
+        <img src="img/Logo.png" alt="logo" />
+      </div>
+      <div>
+        <button id="login" class="btn btn--green btn--small">Login</button>
+      </div>
+    </header>
+  
+    <main class="main">
+        <div>
+            <img src="img/home.jpg" alt="logo" />
+        </div>
+    </main>
+  
+    <div class="footer">
+      <div class="footer__logo">
+          <img src="img/Logo.png" alt="logo" />
+      </div>
+      <ul class="footer__nav">
+          <li><a href="#">About us</a></li>
+          <li><a href="#">Contact</a></li>
+      </ul>
+      <p class="footer__copyright">
+          &copy; Cloudeats. All rights reserved.
+      </p>
+    </div>
+
+    <script type="text/javascript">
+    document.getElementById("login").onclick = function () {
+        location.href = "http://localhost:8000/login";
+    }
+    </script>
+  </body>
+  
+</html>
