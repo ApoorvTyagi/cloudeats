@@ -40,7 +40,6 @@ function initialize(server) {
 
 			// 3. After fetching nearest Restaurants, fire a 'order-request' event to each of them
 			for (let i = 0; i < nearestRestaurants.length; i++) {
-				console.log(nearestRestaurants[i].restaurantId);
 				io.sockets.in(nearestRestaurants[i].restaurantId).emit('order-request', eventData);
 			}
 

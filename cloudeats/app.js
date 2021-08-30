@@ -5,7 +5,7 @@ const express = require('express');
 const consolidate = require('consolidate');
 const mongoose = require('mongoose');
 const client = require('prom-client'); // For Monitoring application
-const auth = require('express-openid-connect'); // For connecting with Auth0
+const { auth } = require('express-openid-connect'); // For connecting with Auth0
 
 const routes = require('./routes');
 const socketEvents = require('./socket-events');
