@@ -1,4 +1,4 @@
-const dataModel = require('./data-model');
+const dataModel = require('./db/data-model');
 
 const Restaurant = dataModel.restaurant;
 const Order = dataModel.order;

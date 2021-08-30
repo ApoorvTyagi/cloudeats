@@ -4,13 +4,12 @@ const http = require('http');
 const express = require('express');
 const consolidate = require('consolidate');
 const mongoose = require('mongoose');
-
-const client = require('prom-client');
+const client = require('prom-client'); // For Monitoring application
+const auth = require('express-openid-connect'); // For connecting with Auth0
 
 const routes = require('./routes');
 const socketEvents = require('./socket-events');
 
-const { auth } = require('express-openid-connect'); // For connecting with Auth0
 
 const register = new client.Registry()
 
@@ -22,8 +21,8 @@ client.collectDefaultMetrics({ register });
 
 const app = express();
 
-app.set('views', 'views'); // Set the folder-name from where you serve the html page.
-app.use(express.static('./public')); // setting the folder name (public) where all the static files like css, images etc are made available
+app.set('views', 'views'); // Set the folder-name for the html page.
+app.use(express.static('./public')); // setting the folder name for all the static files like css, images etc
 
 app.set('view engine', 'html');
 app.engine('html', consolidate.handlebars); // Use handlebars to parse templates when we do res.render
@@ -56,6 +55,7 @@ app.get('/', (req, res) => {
     res.redirect('/customers.html?userId=' + req.oidc.user.nickname) : res.redirect('/home')
 });
 
+// Prometheus Metrics
 app.get('/metrics', (_req, res) => {
     res.send(client.register.metrics());
 });

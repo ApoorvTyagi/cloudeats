@@ -1,4 +1,4 @@
-const dbOperations = require('./db/db-operations');
+const dbOperations = require('./service');
 const mongoose = require('mongoose');
 
 function initialize(server) {
@@ -6,17 +6,15 @@ function initialize(server) {
 	const io = require('socket.io')(server);
 
 	io.on('connection', (socket) => { // Listen on the 'connection' event for incoming sockets
-		console.log('A user just connected');
-
+		
 		socket.on('join', (data) => { // Listen to any join event from connected users
-			socket.join(data.userId); // User joins a unique room/channel that's named after the userId
-			console.log(`User joined room: ${data.userId}`);
+			socket.join(data.userId);
 		});
 
-		// Listen to a 'order-request' event from connected customers
+		// Listen to a 'order-request' event from customers
 		socket.on('order-request', async (eventData) => {
             /*
-            	eventData contains userId and location
+            	eventData contains customerId and location
             	1. First save the request details in the collection requestsData
             	2. AFTER saving, fetch nearby restaurant from customer's location
             	3. Fire a order-request event to each of the restaurant
