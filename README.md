@@ -4,7 +4,7 @@
 - Run `npm install`
 
 ### How to run:
-- run `node app.js`
+- Run `node ./app.js`
 - Open a demo customer page by going to http://localhost:8000/login
 - Open 1 or more Restaurant in separate tabs - [Restaurant 1](http://localhost:8000/restaurant.html?userId=1), [Restaurant 2](http://localhost:8000/restaurant.html?userId=2)
 
