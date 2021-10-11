@@ -1,3 +1,8 @@
+# Cloudeats
+A cloud kitchen app for a chain of restaurants. Made using `Node.js`, `Express.js`, `HTML` and `MongoDB`.
+
+> ![Cloudeats](Assets/CloudKitchen.jpeg)
+
 ### How to install:
 - Clone or fork this repo
 - Install NodeJS and MongoDB
@@ -14,3 +19,24 @@
 - Restaurant Online/Offline Validations
 - Variable distance (upto a limit) in case nearby restaurants not found
 - Restaurants are able to set the count of max concurrent engagement with the customers
+
+## Screenshots
+
+- ### Customer
+![Customer](Assets/Customer.png)
+
+
+- ### Restaurant
+![Restaurant](Assets/Restaurant.png)
+
+
+- ### Customer Order Update
+![Order Update](Assets/Customer_Order_Update.png)
+
+
+- ### Restaurant Order Update
+![Order Update](Assets/Restaurant_Update.png)
+
+
+- ### Customer Order Recieved
+![Order Recieved](Assets/Customer_Final_Update.png)
