@@ -9,7 +9,7 @@
     "debug": "^2.6.9",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "express-openid-connect": "^2.5.2",
+    "express-openid-connect": "^2.7.2",
     "handlebars": "^4.1.2",
     "mapbox-gl": "^2.4.1",
     "mongoose": "^5.6.2",
